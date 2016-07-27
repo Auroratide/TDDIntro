@@ -26,7 +26,7 @@ public class Account {
 /*  Public Methods
  *  =========================================================================*/
     public void deposit(int amount) {
-        // do nothing
+        balance += amount;
     }
  
 /*  Private Members
