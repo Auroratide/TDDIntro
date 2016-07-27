@@ -106,6 +106,7 @@ public class LibraryTest {
         library.welcome(time);
 
         // add a verify here
+        verify(printStream).println(contains("The current time is "));
     }
 
     @Test
