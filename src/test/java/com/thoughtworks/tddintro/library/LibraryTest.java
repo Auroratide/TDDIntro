@@ -39,7 +39,7 @@ public class LibraryTest {
     public void shouldPrintBookTitleWhenThereIsOneBook() {
         String title = "Book Title";
         books.add(title);
-        Library library = new Library(books, printStream, dateTimeFormatter);
+        Library library = createLibrary();
 
         library.listBooks();
 
@@ -49,7 +49,7 @@ public class LibraryTest {
 
     @Test
     public void shouldPrintNothingWhenThereAreNoBooks() {
-        Library library = new Library(books, printStream, dateTimeFormatter);
+        Library library = createLibrary();
         library.listBooks();
         verify(printStream, never()).println("");
     }
@@ -60,7 +60,7 @@ public class LibraryTest {
         String secondTitle = "Second";
         books.add(firstTitle);
         books.add(secondTitle);
-        Library library = new Library(books, printStream, dateTimeFormatter);
+        Library library = createLibrary();
 
         library.listBooks();
 
@@ -78,10 +78,7 @@ public class LibraryTest {
     // This one is done for you
     @Test
     public void shouldWelcomeUser() {
-        List<String> books = new ArrayList<>();
-        PrintStream printStream = mock(PrintStream.class);
-        DateTimeFormatter dateTimeFormatter = mock(DateTimeFormatter.class);
-        Library library = new Library(books, printStream, dateTimeFormatter);
+        Library library = createLibrary();
 
         // We don't need to mock DateTime because it is a value object
         // We can't mock it because it is a final class
@@ -94,15 +91,11 @@ public class LibraryTest {
 
     @Test
     public void shouldDisplayFormattedTimeWhenFormattedTimeIsAnEmptyString() {
-        List<String> books = new ArrayList<>();
-        PrintStream printStream = mock(PrintStream.class);
         DateTime time = new DateTime();
-        DateTimeFormatter dateTimeFormatter = mock(DateTimeFormatter.class);
 
         when(dateTimeFormatter.print(time)).thenReturn("");
 
-        Library library = new Library(books, printStream, dateTimeFormatter);
-
+        Library library = createLibrary();
         library.welcome(time);
 
         // add a verify here
@@ -111,8 +104,18 @@ public class LibraryTest {
 
     @Test
     public void shouldDisplayFormattedTimeWhenFormattedTimeIsNotEmpty() {
+        DateTime time = new DateTime();
+        String timeString = "5:00 PM";
 
-        // implement me
-        // then move common test variables into a setup method
+        when(dateTimeFormatter.print(time)).thenReturn(timeString);
+
+        Library library = createLibrary();
+        library.welcome(time);
+
+        verify(printStream).println(contains(timeString));
+    }
+
+    private Library createLibrary() {
+        return new Library(books, printStream, dateTimeFormatter);
     }
 }
